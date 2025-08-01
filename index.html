@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NeuroLinq Chatbot</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; margin-top: 50px; }
+    input, button { font-size: 16px; padding: 10px; width: 300px; margin: 5px; }
+    #response { margin-top: 20px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>🤖 Welcome to NeuroLinq</h1>
+  <input id="userInput" type="text" placeholder="Ask me something..." />
+  <br>
+  <button onclick="ask()">Send</button>
+  <div id="response">My response will appear here...</div>
+
+  <script>
+    async function ask() {
+      const input = document.getElementById("userInput").value;
+      const responseBox = document.getElementById("response");
+      responseBox.innerText = "Thinking...";
+
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message: input })
+      });
+
+      const data = await res.json();
+      responseBox.innerText = data.reply || "Hmm... I got nothing.";
+    }
+  </script>
+</body>
+</html>
